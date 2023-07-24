@@ -66,7 +66,6 @@ RegisterNetEvent('stabs:client:HealInjuries', function(playerId)
 end)
 
 
-
-RegisterCommand("givesaline", function()
-    TriggerServerEvent('giveItem')
-end)
+-- RegisterCommand("givesaline", function()
+--     TriggerServerEvent('giveItem')
+-- end)
