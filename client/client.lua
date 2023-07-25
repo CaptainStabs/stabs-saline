@@ -57,9 +57,6 @@ RegisterNetEvent('stabs:client:HealInjuries', function(playerId)
     TriggerServerEvent("hospital:server:RestoreWeaponDamage")
     
     local currentHealth = GetEntityHealth(player)
-    print('PlayerID', playerId)
-    print('PedID',player) -- Now it should print the local player's ped correctly
-    print("Current Health", currentHealth)
     SetEntityHealth(player, currentHealth + 30) -- Heal the local player
 
     QBCore.Functions.Notify(Lang:t('success.wounds_healed'), 'success')
