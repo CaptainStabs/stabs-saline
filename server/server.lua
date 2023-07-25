@@ -4,7 +4,6 @@ RegisterNetEvent('stabs:server:HealPlayer', function(playerId)
 	local src = source
 	local Player = QBCore.Functions.GetPlayer(src)
 	local Patient = QBCore.Functions.GetPlayer(playerId)
-    print('PlayerID', playerId) -- This one is correct and works
 	if Patient then	
         Player.Functions.RemoveItem('saline', 1)
         TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items['saline'], "remove")
