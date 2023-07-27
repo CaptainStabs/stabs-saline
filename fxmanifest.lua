@@ -11,3 +11,10 @@ shared_scripts {
 	'locales/en.lua',
 	'locales/*.lua',
 }
+
+
+files {
+    'stream/*.ydr',
+    'stream/*.ytd',
+}
+data_file 'DLC_ITYP_REQUEST' 'stream/iv_bag.ytyp'
