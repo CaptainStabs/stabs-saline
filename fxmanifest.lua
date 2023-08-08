@@ -18,3 +18,8 @@ files {
     'stream/*.ytd',
 }
 data_file 'DLC_ITYP_REQUEST' 'stream/iv_bag.ytyp'
+
+dependencies {
+    'qb-core',
+    'qb-ambulancejob',
+}
