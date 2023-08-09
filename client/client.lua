@@ -35,8 +35,7 @@ local function LoadModel(model)
 end
 
 RegisterNetEvent('saline:client:UseSaline', function()
-    -- local ivBag = 'iv_bag'
-    local ivBag = 'prop_ld_binbag_01'
+    local ivBag = 'iv_bag'
     local bagHash = GetHashKey(ivBag)
     local hasItem = QBCore.Functions.HasItem('saline')
     local healAnimDict = "anim@amb@business@weed@weed_inspecting_high_dry@"
