@@ -11,6 +11,14 @@ RegisterNetEvent('stabs:server:HealPlayer', function(playerId)
 	end
 end)
 
+RegisterNetEvent('saline:server:causeBleed', function(targetId)
+	TriggerClientEvent('hospital:client:bleedPlayer', targetId, 5)
+end)
+
+RegisterNetEvent('saline:server:stopBleed', function(targetId)
+	TriggerClientEvent('hospital:client:stopBleed', targetId, 5)
+end)
+
 -- Testing command
 RegisterServerEvent('giveItem', function()
     local src = source

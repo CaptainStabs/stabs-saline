@@ -1,5 +1,11 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 
+local function GetDistanceBetweenPlayers(player1, player2)
+    local pos1 = GetEntityCoords(GetPlayerPed(player1))
+    local pos2 = GetEntityCoords(GetPlayerPed(player2))
+    return #(pos1 - pos2)
+end
+
 local function GetClosestPlayer()
     local closestPlayers = QBCore.Functions.GetPlayersFromCoords()
     local closestDistance = -1
@@ -29,7 +35,8 @@ local function LoadModel(model)
 end
 
 RegisterNetEvent('saline:client:UseSaline', function()
-    local ivBag = 'iv_bag'
+    -- local ivBag = 'iv_bag'
+    local ivBag = 'prop_ld_binbag_01'
     local bagHash = GetHashKey(ivBag)
     local hasItem = QBCore.Functions.HasItem('saline')
     local healAnimDict = "anim@amb@business@weed@weed_inspecting_high_dry@"
@@ -45,7 +52,25 @@ RegisterNetEvent('saline:client:UseSaline', function()
             AttachEntityToEntity(bag, playerPed, boneIndex, 0.08, 0, 0.05, 90.0, 90.0, 180.0, true, true, false, true, 1, true)
 
             local playerId = GetPlayerServerId(player)
-            QBCore.Functions.Progressbar("hospital_healwounds", "Injecting saline....", 5000, false, true, {
+
+            healing = true
+            Citizen.CreateThread(function()
+                while healing do
+                    Citizen.Wait(1000)
+                    local currentDistance = GetDistanceBetweenPlayers(PlayerId(), player)
+                    print(currentDistance, distance)
+                    if currentDistance > distance + 2.0 then -- You can adjust this distance as needed
+                        TriggerServerEvent('saline:server:causeBleed', playerId)
+                        QBCore.Functions.Notify("The patient moved too far away!", "error")
+                        TriggerEvent('progressbar:client:cancel')
+                        Citizen.Wait(60000) -- Allows two bleedrate ticks to pass
+                        TriggerServerEvent('saline:server:stopBleed', playerId)
+                        break
+                    end
+                end
+            end)
+            
+            QBCore.Functions.Progressbar("hospital_healwounds", "Injecting saline....", 15000, false, true, {
                 disableMovement = false,
                 disableCarMovement = false,
                 disableMouse = false,
@@ -59,11 +84,14 @@ RegisterNetEvent('saline:client:UseSaline', function()
                 QBCore.Functions.Notify("You healed someone!", 'success')
                 TriggerServerEvent("stabs:server:HealPlayer", playerId)
                 DeleteEntity(bag)
+                healing = false
             end, function() -- Cancel
                 StopAnimTask(PlayerPedId(), healAnimDict, "exit", 1.0)
                 QBCore.Functions.Notify('Canceled...', "error")
+                healing = false
                 DeleteEntity(bag)
             end)
+
         else
             QBCore.Functions.Notify('No Player Nearby', "error")
         end
@@ -83,6 +111,6 @@ RegisterNetEvent('stabs:client:HealInjuries', function(playerId)
     QBCore.Functions.Notify(Lang:t('success.wounds_healed'), 'success')
 end)
 
--- RegisterCommand("givesaline", function()
---     TriggerServerEvent('giveItem')
--- end)
+RegisterCommand("givesaline", function()
+    TriggerServerEvent('giveItem')
+end)
